@@ -27,6 +27,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-//npm start
-// *running app*
-//CTRL+C to exit

@@ -1,29 +1,145 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Pressable, Platform, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation,useRoute,useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import textStyles from '../components/customText';
+import containerStyles from '../components/customContainers';
+import buttonStyles from '../components/customButtons';
+import AltitudeIndicator from '../components/altitudeGraph';
 
 export default function DataScreen() {
+  const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
+
+  const route = useRoute();
+  console.log(route.params.nameInputValue)
+
+  const nameInputValue = route.params?.nameInputValue || 'Missão 1';
+  const connectionSelectedValue = route.params?.connectionSelectedValue || 'uart';
+  const rateInputValue = route.params?.rateInputValue || '115200';
+
+  const [isRecording, setIsRecording] = useState(false);
+  const handlePressRecordStop = () => {
+    setIsRecording(!isRecording);
+    if (!isRecording) {
+      console.log('Iniciando gravação...');
+    } else {
+      console.log('Parando gravação...');
+    }
+  };
+  
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert(
+          'Salvar Dados', // Título do popup
+          'Deseja salvar os dados antes de sair?', // Mensagem do popup
+          [
+            {
+              text: 'Não Salvar', // Texto do botão "Cancelar"
+              onPress: () => navigation.navigate('Home'), // Ao não salvar, navega para Home
+              style: 'cancel', // Estilo do botão (cancel, destructive, default)
+            },
+            {
+              text: 'Salvar', // Texto do botão "Salvar"
+              onPress: () => {
+                // TODO: Implementar lógica real de salvar dados aqui
+                console.log('Dados salvos (simulado)');
+                navigation.navigate('Home');
+              },
+            },
+          ],
+          { cancelable: true }
+        );
+        return true;
+      };
+      const backHandler = navigation.addListener('beforeRemove', (e) => {
+         e.preventDefault();
+         onBackPress();
+      });
+      return () => {
+        backHandler();
+      };
+    }, [navigation])
+  );
+
   return (
     <LinearGradient
-      colors={['#384E77', '#18314f', '#04020F']}
-      start={{ x: 0.5, y: 0 }}
-      end={{ x: 0.5, y: 1 }}
-      style={styles.container}
+      colors={['#384E77', '#18314f', '#04020F']} 
+      start={{ x: 0.5, y: 0 }} 
+      end={{ x: 0.5, y: 1 }} 
+      style={containerStyles.gradientcontainer}
       >
-        <View style={styles.innercontainer}>
-          <Text>Hello World!</Text>
-          <StatusBar style="auto" />
-          <Button title="Clique aqui" onPress={() => alert('Botão pressionado!')} />
+        <View style={[containerStyles.innercontainer, {paddingTop: insets.top}]}>
+          <View style={[containerStyles.rowcontainer, {paddingTop:'5%'}]}>
+            <Text style={[textStyles.maintitle]}>{nameInputValue}</Text>
+            <Pressable 
+              style={({ pressed }) => [styles.recordStopButton, {opacity: pressed ? 0.7 : 1,},]} 
+              android_ripple={{ color: 'rgba(255, 255, 255, 0.2)', borderless: false, foreground: true  }}
+              onPress={handlePressRecordStop}
+              >
+                {isRecording ? (
+                  <><Ionicons name="stop-circle-outline" size={30} color="white" />
+                  <Text style={[textStyles.buttonText, {fontSize:14}]}>Parar</Text></>
+                ) : (
+                  <><MaterialCommunityIcons name="record-rec" size={38} color="white" />
+                  <Text style={[textStyles.buttonText, {fontSize:14}]}>Gravar</Text></>
+                )}
+            </Pressable>
+          </View>
+          <View style={containerStyles.rowcontainer}>
+            <View style={styles.altitudeGraphContainer}>
+              <AltitudeIndicator altitude={700} apogee={930}>
+              </AltitudeIndicator>
+            </View>
+          </View>
         </View>
       </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+  roundedButton:{
+    backgroundColor: '#3875e8',
+    alignItens: "center",
     justifyContent: 'center',
+    width:'40%',
+    height: '100%',
+    overflow:'hidden',
+    borderRadius:10,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  altitudeGraphContainer: {
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  recordStopButton: {
+    height: '100%',
+    aspectRatio: 1,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
 });

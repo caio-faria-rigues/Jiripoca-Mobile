@@ -37,9 +37,9 @@ function BottomTabNavigator() {
         component={DataScreen}
         options={{
           title: 'Dados', // Título exibido na aba
-          // tabBarIcon: ({ color, size }) => ( // Exemplo de ícone
-          //   <Ionicons name="list" color={color} size={size} />
-          // ),
+          tabBarIcon: ({ color, size }) => ( // Exemplo de ícone
+            <Ionicons name="bar-chart-sharp" color={color} size={size} />
+          ),
         }}
       />
       <BottomTab.Screen
@@ -47,9 +47,9 @@ function BottomTabNavigator() {
         component={MapScreen}
         options={{
           title: 'Mapa', // Título exibido na aba
-          // tabBarIcon: ({ color, size }) => ( // Exemplo de ícone
-          //   <Ionicons name="map" color={color} size={size} />
-          // ),
+          tabBarIcon: ({ color, size }) => ( // Exemplo de ícone
+            <Ionicons name="map" color={color} size={size} />
+          ),
         }}
       />
       <BottomTab.Screen
@@ -57,9 +57,9 @@ function BottomTabNavigator() {
         component={SettingsScreen}
         options={{
           title: 'Configurações', // Título exibido na aba
-          // tabBarIcon: ({ color, size }) => ( // Exemplo de ícone
-          //   <Ionicons name="settings" color={color} size={size} />
-          // ),
+          tabBarIcon: ({ color, size }) => ( // Exemplo de ícone
+            <Ionicons name="settings-sharp" color={color} size={size} />
+          ),
         }}
       />
     </BottomTab.Navigator>

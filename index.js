@@ -2,6 +2,8 @@ import { registerRootComponent } from 'expo';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import AppNavigator from './src/navigation/Navigation';
+import * as SystemUI from 'expo-system-ui'; // Importe a biblioteca
+import React, { useEffect } from 'react'; // Importe useEffect
 
 import Home from './src/screens/Home';
 
@@ -14,6 +16,10 @@ const customFonts = {
 
 function App(){
     const [fontsLoaded] = useFonts(customFonts);
+    useEffect(() => {
+        SystemUI.setBackgroundColorAsync('#04020F');
+    }, []);
+    
     if (!fontsLoaded) {
         return null;
     }

@@ -27,7 +27,7 @@ export default function Home() {
       >
         <View style={[containerStyles.innercontainer, {paddingTop: insets.top}]}>
           <Text style={textStyles.maintitle}>Seja {"\n"}bem-vindo!</Text>
-          <View style={containerStyles.rowcontainer}>
+          <View style={[containerStyles.rowcontainer, {height:'12%'}]}>
             <Pressable 
               style={({ pressed }) => [buttonStyles.roundedButton, {opacity: pressed ? 0.7 : 1,},]} 
               android_ripple={{ color: 'rgba(255, 255, 255, 0.2)', borderless: false, foreground: true  }}
