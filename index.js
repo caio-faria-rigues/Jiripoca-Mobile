@@ -1,6 +1,7 @@
 import { registerRootComponent } from 'expo';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
+import AppNavigator from './src/navigation/Navigation';
 
 import Home from './src/screens/Home';
 
@@ -13,9 +14,12 @@ const customFonts = {
 
 function App(){
     const [fontsLoaded] = useFonts(customFonts);
+    if (!fontsLoaded) {
+        return null;
+    }
     return (
         <SafeAreaProvider>
-            <Home />
+            <AppNavigator />
         </SafeAreaProvider>
         );
 }

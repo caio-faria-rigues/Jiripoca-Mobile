@@ -2,32 +2,40 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Pressable, Platform  } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 import textStyles from '../components/customText';
+import containerStyles from '../components/customContainers';
+import buttonStyles from '../components/customButtons';
 
 export default function Home() {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
+
   const handlePress = () => {
     alert('Botão customizado pressionado!');
+  }
+  const handleGoToNew = () => {
+    navigation.navigate('NewFlight');
   }
   return (
     <LinearGradient
       colors={['#384E77', '#18314f', '#04020F']} 
       start={{ x: 0.5, y: 0 }} 
       end={{ x: 0.5, y: 1 }} 
-      style={styles.gradientcontainer}
+      style={containerStyles.gradientcontainer}
       >
-        <View style={[styles.innercontainer, {paddingTop: insets.top}]}>
+        <View style={[containerStyles.innercontainer, {paddingTop: insets.top}]}>
           <Text style={textStyles.maintitle}>Seja {"\n"}bem-vindo!</Text>
-          <View style={styles.rowcontainer}>
+          <View style={containerStyles.rowcontainer}>
             <Pressable 
-              style={({ pressed }) => [styles.roundedButton, {opacity: pressed ? 0.7 : 1,},]} 
+              style={({ pressed }) => [buttonStyles.roundedButton, {opacity: pressed ? 0.7 : 1,},]} 
               android_ripple={{ color: 'rgba(255, 255, 255, 0.2)', borderless: false, foreground: true  }}
-              onPress={handlePress}>
+              onPress={handleGoToNew}>
               <Text style={textStyles.buttonText}>Nova Missão</Text>
             </Pressable>
             <Pressable 
-              style={({ pressed }) => [styles.roundedButton, {opacity: pressed ? 0.7 : 1,},]}
+              style={({ pressed }) => [buttonStyles.roundedButton, {opacity: pressed ? 0.7 : 1,},]}
               android_ripple={{ color: 'rgba(255, 255, 255, 0.2)', borderless: false, foreground: true  }} 
               onPress={handlePress}>
               <Text style={textStyles.buttonText}>Abrir Missão</Text>
@@ -42,25 +50,6 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  gradientcontainer: {
-    flex: 1,
-  },
-  innercontainer: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    //backgroundColor: '#ffffff',
-    alignItems: 'center',
-    justifyContent: 'top',
-    gap:'3%'
-  },
-  rowcontainer:{
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    height:'15%',
-    gap:'5%',
-  },
   roundedButton:{
     backgroundColor: '#3875e8',
     alignItens: "center",
@@ -82,7 +71,3 @@ const styles = StyleSheet.create({
     }),
   },
 });
-//npm start
-// *running app*
-//CTRL+C to exit
-//npx expo start

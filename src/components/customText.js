@@ -14,7 +14,13 @@ const textStyles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 18,
         fontFamily: 'Lato-Regular',
-        }
+        },
+    defaultText:{
+        textAlign: 'right',
+        color: '#ffffff',
+        fontSize: 18,
+        fontFamily: 'Lato-Regular',
+    },
 })
 
 export default textStyles

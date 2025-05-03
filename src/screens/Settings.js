@@ -2,12 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function App() {
+export default function SettingsScreen() {
   return (
     <LinearGradient
-      colors={['#384E77', '#18314f', '#04020F']} // Cores do gradiente
-      start={{ x: 0.5, y: 0 }} // Ponto de início do gradiente (topo esquerdo)
-      end={{ x: 0.5, y: 1 }} // Ponto de término do gradiente (canto inferior direito)
+      colors={['#384E77', '#18314f', '#04020F']}
+      start={{ x: 0.5, y: 0 }}
+      end={{ x: 0.5, y: 1 }}
       style={styles.container}
       >
         <View style={styles.innercontainer}>
