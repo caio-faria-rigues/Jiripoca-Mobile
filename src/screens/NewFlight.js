@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, Pressable, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, Pressable, ScrollView, TextInput, Keyboard } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -19,9 +19,11 @@ export default function NewFlight() {
   const [connectionSelectedValue, setConectionSelectedValue] = useState("uart");
 
   const handleGoBack = () => {
+    Keyboard.dismiss()
     navigation.navigate('Home');
   }
   const handleGoData = () => {
+    Keyboard.dismiss()
     navigation.navigate('MainTabs', {
       screen: 'Data',
       params: {

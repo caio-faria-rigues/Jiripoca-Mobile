@@ -1,16 +1,9 @@
 import React from 'react';
-<<<<<<< HEAD
 import { StyleSheet, Dimensions} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-=======
-import { StyleSheet} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
->>>>>>> 501185bc355d74f1f130e2f0f2b03d969ef10d54
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Home from '../screens/Home';
@@ -23,7 +16,6 @@ const RootStack = createNativeStackNavigator();
 
 const BottomTab = createBottomTabNavigator();
 
-<<<<<<< HEAD
 const { height: screenHeight } = Dimensions.get('window');
 const TAB_BAR_BASE_HEIGHT_PERCENTAGE = 7;
 
@@ -33,9 +25,6 @@ function BottomTabNavigator() {
   const tabBarBaseHeight = screenHeight * (TAB_BAR_BASE_HEIGHT_PERCENTAGE / 100);
 
   const totalTabBarHeight = tabBarBaseHeight + insets.bottom;
-=======
-function BottomTabNavigator() {
->>>>>>> 501185bc355d74f1f130e2f0f2b03d969ef10d54
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -45,15 +34,9 @@ function BottomTabNavigator() {
         tabBarInactiveTintColor: '#888', // Cor do ícone/texto da aba inativa
         tabBarStyle: { // Estilo da barra inferior
           backgroundColor: '#ffffff', // Cor de fundo da barra
-<<<<<<< HEAD
           paddingBottom: insets.bottom, // Padding na parte inferior
           paddingTop: 5, // Padding na parte superior
           height: totalTabBarHeight, // Altura da barra
-=======
-          paddingBottom: 5, // Padding na parte inferior
-          paddingTop: 5, // Padding na parte superior
-          height: 60, // Altura da barra
->>>>>>> 501185bc355d74f1f130e2f0f2b03d969ef10d54
         },
       }}
     >

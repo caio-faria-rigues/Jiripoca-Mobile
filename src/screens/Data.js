@@ -78,13 +78,13 @@ export default function DataScreen() {
       style={containerStyles.gradientcontainer}
       >
         <View style={[containerStyles.innercontainer, {paddingTop: insets.top}]}>
-          <View style={[containerStyles.rowcontainer, {paddingTop:'5%'}, {width:'90%'}, {height: '15%'},{gap: '20%'}, {backgroundColor: 'purple'}]}>
-            <View style={[{backgroundColor: 'red'}, {alignSelf: 'flex-start'}]}>
-              <Text style={[textStyles.maintitle, {width: '100%'}]}>{nameInputValue}</Text>
+          <View style={[containerStyles.rowcontainer, {paddingTop:'5%'}, {width:'90%'}, {height: '15%'},{gap: '10%'}, {backgroundColor: 'purple'}]}>
+            <View style={[{backgroundColor: 'red'}, {alignSelf: 'flex-start'}, {height: '100%'}, {width: '70%'}]}>
+              <Text style={[textStyles.maintitle, {width: '100%'}]} numberOfLines={2}>{nameInputValue}</Text>
             </View>
-            <View style={[{backgroundColor: 'green'}, {alignSelf: 'flex-end'}]}>
+            <View style={[{backgroundColor: 'green'}, {alignSelf: 'flex-end'}, {height: '100%'}, {width: '20%'}]}>
               <Pressable 
-                style={({ pressed }) => [styles.recordStopButton, {opacity: pressed ? 0.7 : 1,},]} 
+                style={({ pressed }) => [styles.roundedButton, {opacity: pressed ? 0.7 : 1,},]} 
                 android_ripple={{ color: 'rgba(255, 255, 255, 0.2)', borderless: false, foreground: true  }}
                 onPress={handlePressRecordStop}
                 >
@@ -112,12 +112,12 @@ export default function DataScreen() {
 const styles = StyleSheet.create({
   roundedButton:{
     backgroundColor: '#3875e8',
-    alignItens: "center",
+    alignItems: "center",
     justifyContent: 'center',
-    width:'40%',
-    height: '100%',
+    aspectRatio: 1,
+    height: '80%',
     overflow:'hidden',
-    borderRadius:10,
+    borderRadius: 10,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -135,15 +135,11 @@ const styles = StyleSheet.create({
     alignItems: 'left',
   },
   recordStopButton: {
-    height: '100%',
+    height: '80%',
     aspectRatio: 1,
-    borderRadius: 30,
+    borderRadius: 999,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    elevation: 8,
   },
 });
