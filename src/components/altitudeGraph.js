@@ -1,84 +1,177 @@
-// components/AltitudeIndicator.js
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const AltitudeIndicator = ({ 
-    altitude,
-    apogee, 
-    minAltitude = 0, 
-    maxAltitude = 1000, 
-    height = 200, 
-    width = 60, 
-    altitudeIndicatorColor = 'red',
-    apogeeIndicatorColor = 'yellow', 
-    containerColor = '#eee',
-    borderColor = '#ccc' }) => {
+const ALTITUDE_INDICATOR_COLOR = 'red';
+const APOGEE_INDICATOR_COLOR = 'magenta';
 
-  const clampedAltitude = Math.max(minAltitude, Math.min(maxAltitude, altitude));
-  const clampedApogee = Math.max(minAltitude, Math.min(maxAltitude, apogee));
-  const altitudeRange = maxAltitude - minAltitude;
-  const altitudePercentage = (clampedAltitude - minAltitude) / altitudeRange;
+const INDICATOR_HEIGHT_PX = 10;
+const SCALE_INTERVAL = 500;
+const GRAPH_WIDTH_PERCENTAGE_OF_HEIGHT = 0.25;
+const SCALE_WIDTH_PERCENTAGE_OF_HEIGHT = 0.20;
 
-  const apogeePercentage = (clampedApogee - minAltitude) / altitudeRange;
+export default function AltitudeGraph({ currentAltitude, maxAltitude, apogee }) {
+  const [containerHeight, setContainerHeight] = useState(0);
 
-  const altitudeIndicatorPositionFromTop = height - (altitudePercentage * height);
-  const apogeeIndicatorPositionFromTop = height - (apogeePercentage * height);
-  console.log(apogeeIndicatorPositionFromTop)
+  const handleContainerLayout = (event) => {
+    const { height } = event.nativeEvent.layout;
+    setContainerHeight(height);
+  };
+
+  const altitudePercentage = maxAltitude > 0 ? currentAltitude / maxAltitude : 0;
+  const apogeePercentage = maxAltitude > 0 ? apogee / maxAltitude : 0;
+
+  const altitudeIndicatorPositionFromTop = containerHeight - (altitudePercentage * containerHeight);
+  const apogeeIndicatorPositionFromTop = containerHeight - (apogeePercentage * containerHeight);
+
+  const finalAltitudeIndicatorTop = altitudeIndicatorPositionFromTop - (INDICATOR_HEIGHT_PX / 2);
+  const finalApogeeIndicatorTop = apogeeIndicatorPositionFromTop - (INDICATOR_HEIGHT_PX / 2);
+
+  const scaleLabels = [];
+  if (maxAltitude > 0) {
+    for (let alt = 0; alt <= maxAltitude; alt += SCALE_INTERVAL) {
+      scaleLabels.push(alt);
+    }
+  }
+
+  const graphWidth = containerHeight * GRAPH_WIDTH_PERCENTAGE_OF_HEIGHT;
+  const scaleWidth = containerHeight * SCALE_WIDTH_PERCENTAGE_OF_HEIGHT;
+  const totalWidth = graphWidth + scaleWidth;
 
   return (
-    <View style={[styles.container, { height: height, width: width, backgroundColor: containerColor, borderColor: borderColor }]}>
+    <View
+      style={[
+        styles.mainContainer,
+        {
+          height: '100%',
+          width: containerHeight > 0 ? totalWidth : '100%',
+        },
+      ]}
+      onLayout={handleContainerLayout}
+    >
       <View
         style={[
-          styles.altitudeIndicator,
+          styles.graphContainer,
           {
-            backgroundColor: altitudeIndicatorColor,
-            top: altitudeIndicatorPositionFromTop - (styles.altitudeIndicator.height / 2),
+            width: containerHeight > 0 ? graphWidth : 'auto',
+            height: '100%',
           },
         ]}
-      />
-      <View
-        style={[
-          styles.altitudeIndicator,
-          {
-            backgroundColor: apogeeIndicatorColor,
-            top: apogeeIndicatorPositionFromTop - (styles.altitudeIndicator.height / 2),
-          },
-        ]}>
+      >
+        <View style={[styles.graphArea, { zIndex: 0 }]}></View>
+
+        {containerHeight > 0 && (
+          <View
+            style={[
+              styles.altitudeIndicator,
+              {
+                backgroundColor: ALTITUDE_INDICATOR_COLOR,
+                top: finalAltitudeIndicatorTop,
+                zIndex: 3,
+              },
+            ]}
+          >
+          </View>
+        )}
+
+        {containerHeight > 0 && (
+           <View
+            style={[
+              styles.apogeeIndicator,
+              {
+                backgroundColor: APOGEE_INDICATOR_COLOR,
+                top: finalApogeeIndicatorTop,
+                zIndex: 3,
+              },
+            ]}
+          >
+        </View>
+      )}
       </View>
 
-      {/* Opcional: Adicionar marcadores de escala se necessário */}
-      {/* <Text style={[styles.scaleMarker, { top: height - 10 }]}>{minAltitude}</Text> */}
-      {/* <Text style={[styles.scaleMarker, { top: 0 }]}>{maxAltitude}</Text> */}
+      <View
+        style={[
+          styles.scaleContainer,
+          {
+            width: containerHeight > 0 ? scaleWidth : 'auto',
+            height: '100%',
+          },
+        ]}
+      >
+           {containerHeight > 0 && scaleLabels.map((alt) => {
+               const percentage = maxAltitude > 0 ? alt / maxAltitude : 0;
+               const positionFromBottom = percentage * containerHeight;
+               const positionFromTop = containerHeight - positionFromBottom;
 
+               return (
+                 <Text
+                   key={alt}
+                   style={[
+                     styles.scaleLabel,
+                     {
+                       top: positionFromTop - (styles.scaleLabel.fontSize / 2),
+                     }
+                   ]}
+                 >
+                   {alt}
+                 </Text>
+               );
+             })}
+      </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1,
-    borderRadius: 5,
+  mainContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'stretch',
+  },
+  graphContainer: {
+    backgroundColor: '#eeeeee',
     position: 'relative',
-    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#cccccc',
+  },
+  graphArea: {
+    flex: 1,
   },
   altitudeIndicator: {
     position: 'absolute',
     left: 0,
-    width: '100%',
-    height: 5,
+    right: 0,
+    height: INDICATOR_HEIGHT_PX,
+    justifyContent: 'center',
+    paddingHorizontal: 5,
   },
-  apogeeIndicator: {
+   apogeeIndicator: {
     position: 'absolute',
     left: 0,
-    width: '100%',
-    height: 5,
+    right: 0,
+    height: INDICATOR_HEIGHT_PX,
+    justifyContent: 'center',
+    paddingHorizontal: 5,
   },
-  // scaleMarker: { // Estilo para marcadores de escala (opcional)
-  //   position: 'absolute',
-  //   right: 5,
-  //   fontSize: 10,
-  //   color: '#555',
-  // },
+  indicatorText: {
+    fontSize: 12,
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+  scaleContainer: {
+      justifyContent: 'flex-end',
+      paddingVertical: 5,
+      position: 'relative',
+      backgroundColor: 'rgba(0, 255, 0, 0.2)',
+  },
+  scaleLabel: {
+      position: 'absolute',
+      //right: 5,
+      fontSize: 12,
+      color: '#333',
+      zIndex: 4,
+      backgroundColor: 'rgba(255, 255, 255, 0.7)',
+      paddingHorizontal: 3,
+      borderRadius: 3,
+      textAlign: 'left'
+  }
 });
-
-export default AltitudeIndicator;

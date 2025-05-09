@@ -78,25 +78,29 @@ export default function DataScreen() {
       style={containerStyles.gradientcontainer}
       >
         <View style={[containerStyles.innercontainer, {paddingTop: insets.top}]}>
-          <View style={[containerStyles.rowcontainer, {paddingTop:'5%'}]}>
-            <Text style={[textStyles.maintitle]}>{nameInputValue}</Text>
-            <Pressable 
-              style={({ pressed }) => [styles.recordStopButton, {opacity: pressed ? 0.7 : 1,},]} 
-              android_ripple={{ color: 'rgba(255, 255, 255, 0.2)', borderless: false, foreground: true  }}
-              onPress={handlePressRecordStop}
-              >
-                {isRecording ? (
-                  <><Ionicons name="stop-circle-outline" size={30} color="white" />
-                  <Text style={[textStyles.buttonText, {fontSize:14}]}>Parar</Text></>
-                ) : (
-                  <><MaterialCommunityIcons name="record-rec" size={38} color="white" />
-                  <Text style={[textStyles.buttonText, {fontSize:14}]}>Gravar</Text></>
-                )}
-            </Pressable>
+          <View style={[containerStyles.rowcontainer, {paddingTop:'5%'}, {width:'90%'}, {height: '15%'},{gap: '20%'}, {backgroundColor: 'purple'}]}>
+            <View style={[{backgroundColor: 'red'}, {alignSelf: 'flex-start'}]}>
+              <Text style={[textStyles.maintitle, {width: '100%'}]}>{nameInputValue}</Text>
+            </View>
+            <View style={[{backgroundColor: 'green'}, {alignSelf: 'flex-end'}]}>
+              <Pressable 
+                style={({ pressed }) => [styles.recordStopButton, {opacity: pressed ? 0.7 : 1,},]} 
+                android_ripple={{ color: 'rgba(255, 255, 255, 0.2)', borderless: false, foreground: true  }}
+                onPress={handlePressRecordStop}
+                >
+                  {isRecording ? (
+                    <><Ionicons name="stop-circle-outline" size={30} color="white" />
+                    <Text style={[textStyles.buttonText, {fontSize:14}]}>Parar</Text></>
+                  ) : (
+                    <><MaterialCommunityIcons name="record-rec" size={38} color="white" />
+                    <Text style={[textStyles.buttonText, {fontSize:14}]}>Gravar</Text></>
+                  )}
+              </Pressable>
+            </View>
           </View>
-          <View style={containerStyles.rowcontainer}>
+          <View style={[containerStyles.rowcontainer, {height: '30%'}, {width:'90%'}, {backgroundColor: 'yellow'}]}>
             <View style={styles.altitudeGraphContainer}>
-              <AltitudeIndicator altitude={700} apogee={930}>
+              <AltitudeIndicator currentAltitude={700} maxAltitude={3500} apogee={930}>
               </AltitudeIndicator>
             </View>
           </View>
@@ -127,8 +131,8 @@ const styles = StyleSheet.create({
     }),
   },
   altitudeGraphContainer: {
-    marginTop: 20,
     alignSelf: 'center',
+    alignItems: 'left',
   },
   recordStopButton: {
     height: '100%',
